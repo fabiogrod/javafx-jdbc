@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import modelo.servicos.SrvcDepartamento;
 
 public class CtrlVisuMain implements Initializable {
 	
@@ -27,7 +28,7 @@ public class CtrlVisuMain implements Initializable {
 	}
 	
 	@FXML public void onMenuItemDepartamentoAcao() {
-		carregarVisu("/igu/VisuListaDepartamento.fxml");;
+		carregarVisu2("/igu/VisuListaDepartamento.fxml");;
 	}
 	
 	@FXML public void onMenuItemSobreAcao() {
@@ -51,6 +52,28 @@ public class CtrlVisuMain implements Initializable {
 			vboxPrincipal.getChildren().clear();
 			vboxPrincipal.getChildren().add(menuPrincipal);
 			vboxPrincipal.getChildren().addAll(novoVbox.getChildren());			
+		}
+		catch(IOException e) {
+			Alertas.mostraAlertas("IOException", "Erro careegando visualizador", e.getLocalizedMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private synchronized void carregarVisu2(String nomeAbsoluto) {
+		try {
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			VBox novoVbox = carregador.load();
+			
+			Scene cenaPrincipal = Main.getCenaPrincipal();
+			VBox vboxPrincipal = (VBox) ((ScrollPane) cenaPrincipal.getRoot()).getContent();
+			
+			Node menuPrincipal = vboxPrincipal.getChildren().get(0);
+			vboxPrincipal.getChildren().clear();
+			vboxPrincipal.getChildren().add(menuPrincipal);
+			vboxPrincipal.getChildren().addAll(novoVbox.getChildren());
+			
+			CtrlVisuListaDepartamento ctrlVisuListaDep = carregador.getController();
+			ctrlVisuListaDep.setSrvcDepartamento(new SrvcDepartamento());
+			ctrlVisuListaDep.atualizaVisuTabela();
 		}
 		catch(IOException e) {
 			Alertas.mostraAlertas("IOException", "Erro careegando visualizador", e.getLocalizedMessage(), AlertType.ERROR);
