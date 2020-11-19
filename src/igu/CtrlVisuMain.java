@@ -27,7 +27,7 @@ public class CtrlVisuMain implements Initializable {
 	}
 	
 	@FXML public void onMenuItemDepartamentoAcao() {
-		System.out.println("onMenuItemDepartamentoAcao");
+		carregarVisu("/igu/VisuListaDepartamento.fxml");;
 	}
 	
 	@FXML public void onMenuItemSobreAcao() {
