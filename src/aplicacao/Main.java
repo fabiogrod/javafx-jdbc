@@ -14,7 +14,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage palcoPrincipal) {
 		try {
-			FXMLLoader carregador = new FXMLLoader(getClass().getResource("/igu/MainVisualizador.fxml") );
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource("/igu/VisuMain.fxml") );
 			ScrollPane scrollPane = carregador.load();
 			
 			scrollPane.setFitToHeight(true);
