@@ -27,7 +27,7 @@
 06 - Criar um novo projeto JavaFX
 
 	# Nome do projeto, Next > Aba Librarie > Modulepath > Add Library... > User Library > Marque as bibliotecas do JavaFX e do MySQLConnector na lista, Next > para mais configs e Finish.
-	# Se o arquivo module-info.java indicar erro, substitua o texto indicado como erro se tiver pontuação por outro símbolo, traço ou barras não são aceitos pelo compilador, ou digite um nome sem pontuação e espaços.  
+	# Se o arquivo module-info.java indicar erro, mude a primeira linha para module javafx.
 
 07 - Adicione a configuração abaixo.
 
