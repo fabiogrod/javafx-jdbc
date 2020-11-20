@@ -40,7 +40,8 @@ public class CtrlVisuListaDepartamento implements Initializable {
 	
 	@FXML public void onBtoNovoAcao(ActionEvent evento) {
 		Stage palcoPrincipal = Utils.palcoAtual(evento);
-		geraDialogoFormulario("/igu/VisuFormularioDepartamento.fxml", palcoPrincipal);
+		Departamento departamento = new Departamento();
+		geraDialogoFormulario(departamento, "/igu/VisuFormularioDepartamento.fxml", palcoPrincipal);
 	}
 	
 	public void setSrvcDepartamento(SrvcDepartamento srvcDepartamento) {
@@ -74,10 +75,14 @@ public class CtrlVisuListaDepartamento implements Initializable {
 		
 	}
 	
-	private void geraDialogoFormulario(String nomeAbsoluto, Stage palcoPrincipal) {
+	private void geraDialogoFormulario(Departamento departamento,String nomeAbsoluto, Stage palcoPrincipal) {
 		try {
 			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			Pane painel = carregador.load();
+			
+			CtrlFormularioDepartamento ctrlDepartamento = carregador.getController();
+			ctrlDepartamento.setDepartamento(departamento);;
+			ctrlDepartamento.atualizaFormulario();
 			
 			Stage palcoDialogo = new Stage();
 			palcoDialogo.setTitle("Digite as informações do novo departamento: ");
