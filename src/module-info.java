@@ -1,6 +1,7 @@
 module javafx {
 	requires javafx.controls;
 	requires javafx.fxml;
+	requires java.sql;
 	
 	opens aplicacao to javafx.graphics, javafx.fxml;
 	opens igu to javafx.graphics, javafx.fxml;
