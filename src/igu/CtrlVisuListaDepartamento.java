@@ -1,18 +1,27 @@
 package igu;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import aplicacao.Main;
+import igu.util.Alertas;
+import igu.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modelo.entidades.Departamento;
 import modelo.servicos.SrvcDepartamento;
@@ -29,8 +38,9 @@ public class CtrlVisuListaDepartamento implements Initializable {
 	
 	private ObservableList<Departamento> listaObs;
 	
-	@FXML public void onBtoNovoAcao() {
-		System.out.println("onBtoNovoAcao");
+	@FXML public void onBtoNovoAcao(ActionEvent evento) {
+		Stage palcoPrincipal = Utils.palcoAtual(evento);
+		geraDialogoFormulario("/igu/VisuFormularioDepartamento.fxml", palcoPrincipal);
 	}
 	
 	public void setSrvcDepartamento(SrvcDepartamento srvcDepartamento) {
@@ -62,5 +72,23 @@ public class CtrlVisuListaDepartamento implements Initializable {
 		
 		tabelaDepartamento.setItems(listaObs);
 		
+	}
+	
+	private void geraDialogoFormulario(String nomeAbsoluto, Stage palcoPrincipal) {
+		try {
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane painel = carregador.load();
+			
+			Stage palcoDialogo = new Stage();
+			palcoDialogo.setTitle("Digite as informações do novo departamento: ");
+			palcoDialogo.setScene(new Scene(painel));
+			palcoDialogo.setResizable(false);
+			palcoDialogo.initOwner(palcoPrincipal);
+			palcoDialogo.initModality(Modality.WINDOW_MODAL);
+			palcoDialogo.showAndWait();
+		}
+		catch (IOException e) {
+			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+		}
 	}
 }
