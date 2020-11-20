@@ -3,6 +3,7 @@ package igu;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import aplicacao.Main;
 import igu.util.Alertas;
@@ -28,11 +29,14 @@ public class CtrlVisuMain implements Initializable {
 	}
 	
 	@FXML public void onMenuItemDepartamentoAcao() {
-		carregarVisu2("/igu/VisuListaDepartamento.fxml");;
+		carregarVisu("/igu/VisuListaDepartamento.fxml", (CtrlVisuListaDepartamento ctrlVisuListaDep) -> {
+			ctrlVisuListaDep.setSrvcDepartamento(new SrvcDepartamento());
+			ctrlVisuListaDep.atualizaVisuTabela();			
+		});
 	}
 	
 	@FXML public void onMenuItemSobreAcao() {
-		carregarVisu("/igu/VisuSobre.fxml");
+		carregarVisu("/igu/VisuSobre.fxml", null /*x -> {}*/ );
 	}
 	
 	@Override public void initialize(URL uri, ResourceBundle rb) {
@@ -40,25 +44,7 @@ public class CtrlVisuMain implements Initializable {
 		
 	}
 	
-	private synchronized void carregarVisu(String nomeAbsoluto) {
-		try {
-			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-			VBox novoVbox = carregador.load();
-			
-			Scene cenaPrincipal = Main.getCenaPrincipal();
-			VBox vboxPrincipal = (VBox) ((ScrollPane) cenaPrincipal.getRoot()).getContent();
-			
-			Node menuPrincipal = vboxPrincipal.getChildren().get(0);
-			vboxPrincipal.getChildren().clear();
-			vboxPrincipal.getChildren().add(menuPrincipal);
-			vboxPrincipal.getChildren().addAll(novoVbox.getChildren());			
-		}
-		catch(IOException e) {
-			Alertas.mostraAlertas("IOException", "Erro careegando visualizador", e.getLocalizedMessage(), AlertType.ERROR);
-		}
-	}
-	
-	private synchronized void carregarVisu2(String nomeAbsoluto) {
+	private synchronized <T> void carregarVisu(String nomeAbsoluto, Consumer<T> acaoIni) {
 		try {
 			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			VBox novoVbox = carregador.load();
@@ -71,9 +57,10 @@ public class CtrlVisuMain implements Initializable {
 			vboxPrincipal.getChildren().add(menuPrincipal);
 			vboxPrincipal.getChildren().addAll(novoVbox.getChildren());
 			
-			CtrlVisuListaDepartamento ctrlVisuListaDep = carregador.getController();
-			ctrlVisuListaDep.setSrvcDepartamento(new SrvcDepartamento());
-			ctrlVisuListaDep.atualizaVisuTabela();
+			if (acaoIni != null) {
+				T controlador = carregador.getController();
+				acaoIni.accept(controlador);
+			}
 		}
 		catch(IOException e) {
 			Alertas.mostraAlertas("IOException", "Erro careegando visualizador", e.getLocalizedMessage(), AlertType.ERROR);
