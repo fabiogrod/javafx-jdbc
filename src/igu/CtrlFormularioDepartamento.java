@@ -1,9 +1,12 @@
 package igu;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import bd.BDExcecao;
+import igu.monitores.MntrMudancaDados;
 import igu.util.Alertas;
 import igu.util.Restricoes;
 import igu.util.Utils;
@@ -21,6 +24,7 @@ public class CtrlFormularioDepartamento implements Initializable{
 
 	private Departamento departamento;
 	private SrvcDepartamento srvcDepartamento;
+	private List<MntrMudancaDados> mntrMudancaDados = new ArrayList<>();
 	
 	@FXML private TextField txtId;
 	@FXML private TextField txtNome;
@@ -35,6 +39,10 @@ public class CtrlFormularioDepartamento implements Initializable{
 	public void setSrvcDepartamento(SrvcDepartamento srvcDepartamento) {
 		this.srvcDepartamento = srvcDepartamento;
 	}
+	
+	public void inscricaoMntrMudancaDados(MntrMudancaDados monitor) {
+		mntrMudancaDados.add(monitor);
+	}
 
 	@FXML public void onBtoSalvarAcao(ActionEvent evento) {
 		try {
@@ -45,7 +53,7 @@ public class CtrlFormularioDepartamento implements Initializable{
 			
 			if (srvcDepartamento == null)
 			{
-				throw new IllegalAccessException("srvcDepartamento vazio");
+				throw new IllegalAccessException("ServiçoDepartamento vazio");
 			}
 			
 			departamento = getDadosFormulario();
@@ -62,6 +70,7 @@ public class CtrlFormularioDepartamento implements Initializable{
 			}
 			else {
 				srvcDepartamento.salvarAtualizar(departamento);
+				notificaMntrMudancaDados();
 				Utils.palcoAtual(evento).close();
 			}
 		}
@@ -73,6 +82,13 @@ public class CtrlFormularioDepartamento implements Initializable{
 		}
 	}
 	
+	private void notificaMntrMudancaDados() {
+		
+		for (MntrMudancaDados monitor : mntrMudancaDados) {
+			monitor.onDataChanged();
+		}
+	}
+
 	@FXML public void onBtoCancelarAcao(ActionEvent evento) {
 		Utils.palcoAtual(evento).close();
 	}	
