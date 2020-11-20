@@ -3,18 +3,24 @@ package igu;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import bd.BDExcecao;
+import igu.util.Alertas;
 import igu.util.Restricoes;
+import igu.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import modelo.entidades.Departamento;
-import modelo.entidades.Departamento;
+import modelo.servicos.SrvcDepartamento;
 
 public class CtrlFormularioDepartamento implements Initializable{
 
 	private Departamento departamento;
+	private SrvcDepartamento srvcDepartamento;
 	
 	@FXML private TextField txtId;
 	@FXML private TextField txtNome;
@@ -25,13 +31,57 @@ public class CtrlFormularioDepartamento implements Initializable{
 	public void setDepartamento(Departamento departamento) {
 		this.departamento = departamento;
 	}
+	
+	public void setSrvcDepartamento(SrvcDepartamento srvcDepartamento) {
+		this.srvcDepartamento = srvcDepartamento;
+	}
 
-	@FXML public void onBtoSalvarAcao() {
-		System.out.println("onBtoSalvarAcao");
+	@FXML public void onBtoSalvarAcao(ActionEvent evento) {
+		try {
+			if (departamento == null)
+			{
+				throw new IllegalAccessException("Departamento vazio");
+			}
+			
+			if (srvcDepartamento == null)
+			{
+				throw new IllegalAccessException("srvcDepartamento vazio");
+			}
+			
+			departamento = getDadosFormulario();
+			
+//			String teste = String.valueOf( txtNome.getText() );
+//			
+//			System.out.println("String.valueOf( txtNome.getText() - " + String.valueOf( txtNome.getText() ) );			
+//			System.out.println("txtNome: " + teste.equals("null") );
+//			
+//			System.out.println("departamento: " + departamento.getNome().equals("null") );	
+							
+			if (txtNome.getText().equals("null") || txtNome.getText().equals("") ) {
+				Utils.palcoAtual(evento).close();
+			}
+			else {
+				srvcDepartamento.salvarAtualizar(departamento);
+				Utils.palcoAtual(evento).close();
+			}
+		}
+		catch (BDExcecao e) {
+			Alertas.mostraAlertas("Erro ao salvar objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+		catch (IllegalAccessException e) {			
+			Alertas.mostraAlertas("IllegalAccessException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+		}
 	}
 	
-	@FXML public void onBtoCancelarAcao() {
-		System.out.println("onBtoCancelarAcao");
+	@FXML public void onBtoCancelarAcao(ActionEvent evento) {
+		Utils.palcoAtual(evento).close();
+	}	
+	
+	private Departamento getDadosFormulario() {
+		Departamento departamento = new Departamento();
+		departamento.setId(Utils.ParseInt(txtId.getText() ) );
+		departamento.setNome(txtNome.getText() );
+		return departamento;
 	}
 	
 	@Override public void initialize(URL url, ResourceBundle rb) {		
@@ -46,16 +96,12 @@ public class CtrlFormularioDepartamento implements Initializable{
 	public void atualizaFormulario() {
 		if (departamento == null) {
 			throw new IllegalStateException("Departamento vazio");
-		}
+		}	
 		
-		if (departamento.getId() == null) {
-			txtId.setText(String.valueOf("") );
-		}
-		else {
-			txtId.setText(String.valueOf(departamento.getId() ) );
-		}
-		if (departamento.getNome() == null) {
-			txtNome.setText(String.valueOf("") );
+		txtId.setText(String.valueOf(departamento.getId() ) );
+		
+		if ( String.valueOf(departamento.getNome() ).equals("null") ) {
+			txtNome.setText("");			
 		}
 		else {
 			txtNome.setText(String.valueOf(departamento.getNome() ) );

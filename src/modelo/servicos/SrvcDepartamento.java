@@ -24,4 +24,13 @@ public class SrvcDepartamento {
 		
 		return dao.pesquisar();
 	}
+	
+	public void salvarAtualizar(Departamento departamento) {
+		if(departamento.getId() == null) {
+			dao.insere(departamento);
+		}
+		else {
+			dao.atualiza(departamento);
+		}
+	}
 }

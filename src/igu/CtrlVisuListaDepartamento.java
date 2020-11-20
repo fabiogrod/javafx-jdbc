@@ -81,7 +81,8 @@ public class CtrlVisuListaDepartamento implements Initializable {
 			Pane painel = carregador.load();
 			
 			CtrlFormularioDepartamento ctrlDepartamento = carregador.getController();
-			ctrlDepartamento.setDepartamento(departamento);;
+			ctrlDepartamento.setDepartamento(departamento);
+			ctrlDepartamento.setSrvcDepartamento(new SrvcDepartamento());
 			ctrlDepartamento.atualizaFormulario();
 			
 			Stage palcoDialogo = new Stage();
