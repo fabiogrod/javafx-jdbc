@@ -29,9 +29,9 @@ public class CtrlVsdrMain implements Initializable {
 	}
 	
 	@FXML public void onMenuItemDepartamentoAcao() {
-		carregarVisu("/igu/VsdrListaDepartamento.fxml", (CtrlVsdrListaDepartamento ctrlVisuListaDep) -> {
-			ctrlVisuListaDep.setSrvcDepartamento(new SrvcDepartamento());
-			ctrlVisuListaDep.atualizaVsdrTabela();			
+		carregarVisu("/igu/VsdrListaDepartamento.fxml", (CtrlVsdrListaDepartamento ctrlVsdrListaDep) -> {
+			ctrlVsdrListaDep.setSrvcDepartamento(new SrvcDepartamento());
+			ctrlVsdrListaDep.atualizaVsdrTabela();			
 		});
 	}
 	

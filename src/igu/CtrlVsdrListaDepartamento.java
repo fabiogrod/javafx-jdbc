@@ -9,6 +9,7 @@ import aplicacao.Main;
 import igu.monitores.MntrMudancaDados;
 import igu.util.Alertas;
 import igu.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,6 +36,7 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 	@FXML private TableView<Departamento> tabelaDepartamento;
 	@FXML private TableColumn<Departamento, Integer> colunaIdDepartamento;
 	@FXML private TableColumn<Departamento, String> colunaNome;
+	@FXML private TableColumn<Departamento, Departamento> colunaEdicaoTabela;
 	
 	@FXML private Button btoNovo;
 	
@@ -63,6 +66,27 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 		tabelaDepartamento.prefHeightProperty().bind(palco.heightProperty());
 	}
 	
+	public void iniciaBotoesEdicao() {
+		
+		colunaEdicaoTabela.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue() ) );
+		colunaEdicaoTabela.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button botaoEditar = new Button("Editar");
+			
+			@Override protected void updateItem(Departamento departamento, boolean vazio) {
+				super.updateItem(departamento, vazio);
+				if (departamento == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(botaoEditar);
+				
+				botaoEditar.setOnAction(evento -> geraDialogoFormulario(departamento, "/igu/VsdrFormularioDepartamento.fxml", Utils.palcoAtual(evento) ) );
+			}			
+		});
+		colunaEdicaoTabela.setStyle("-fx-alignment: center");
+	}
+	
 	public void atualizaVsdrTabela() {
 		if (srvcDepartamento == null) {
 			throw new IllegalStateException("Serviço nulo.");
@@ -74,6 +98,7 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 		
 		tabelaDepartamento.setItems(listaObs);
 		
+		iniciaBotoesEdicao();		
 	}
 	
 	private void geraDialogoFormulario(Departamento departamento,String nomeAbsoluto, Stage palcoPrincipal) {
