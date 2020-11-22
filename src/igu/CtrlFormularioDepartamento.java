@@ -3,7 +3,9 @@ package igu;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import bd.BDExcecao;
 import igu.monitores.MntrMudancaDados;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import modelo.entidades.Departamento;
+import modelo.excessoes.ExcecaoValidacao;
 import modelo.servicos.SrvcDepartamento;
 
 public class CtrlFormularioDepartamento implements Initializable{
@@ -46,15 +49,15 @@ public class CtrlFormularioDepartamento implements Initializable{
 
 	@FXML public void onBtoSalvarAcao(ActionEvent evento) {
 		try {
-			if (departamento == null)
-			{
-				throw new IllegalAccessException("Departamento vazio");
-			}
-			
-			if (srvcDepartamento == null)
-			{
-				throw new IllegalAccessException("ServiçoDepartamento vazio");
-			}
+//			if (departamento == null)
+//			{
+//				throw new IllegalAccessException("Departamento vazio");
+//			}
+//			
+//			if (srvcDepartamento == null)
+//			{
+//				throw new IllegalAccessException("ServiçoDepartamento vazio");
+//			}
 			
 			departamento = getDadosFormulario();
 			
@@ -77,8 +80,11 @@ public class CtrlFormularioDepartamento implements Initializable{
 		catch (BDExcecao e) {
 			Alertas.mostraAlertas("Erro ao salvar objeto", null, e.getMessage(), AlertType.ERROR);
 		}
-		catch (IllegalAccessException e) {			
-			Alertas.mostraAlertas("IllegalAccessException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+//		catch (IllegalAccessException e) {			
+//			Alertas.mostraAlertas("IllegalAccessException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+//		}
+		catch (ExcecaoValidacao e) {
+			setMsgsErro(e.getErros());
 		}
 	}
 	
@@ -95,8 +101,21 @@ public class CtrlFormularioDepartamento implements Initializable{
 	
 	private Departamento getDadosFormulario() {
 		Departamento departamento = new Departamento();
+		
+		ExcecaoValidacao excecao = new ExcecaoValidacao("Erro de validacao");
+		
 		departamento.setId(Utils.ParseInt(txtId.getText() ) );
+		
+		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
+			excecao.adicionarErro("nome", "Campo não pode ser vazio");
+		}
+			
 		departamento.setNome(txtNome.getText() );
+		
+		if (excecao.getErros().size() > 0) {
+			throw excecao;
+		}
+		
 		return departamento;
 	}
 	
@@ -121,6 +140,14 @@ public class CtrlFormularioDepartamento implements Initializable{
 		}
 		else {
 			txtNome.setText(String.valueOf(departamento.getNome() ) );
+		}
+	}
+	
+	private void setMsgsErro(Map<String, String> erros) {
+		Set<String> campos = erros.keySet();
+		
+		if(campos.contains("nome")) {
+			lblErroNome.setText(erros.get("nome"));
 		}
 	}
 }
