@@ -10,6 +10,7 @@ import java.util.List;
 
 import bd.BD;
 import bd.BDExcecao;
+import bd.BDExcecaoIntegridade;
 import modelo.dao.DepartamentoDao;
 import modelo.entidades.Departamento;
 
@@ -92,7 +93,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao{
 //			}
 		}
 		catch(SQLException e) {
-			throw new BDExcecao(e.getMessage());
+			throw new BDExcecaoIntegridade(e.getMessage());
 		}
 		finally {
 			BD.fechaStatement(pst);

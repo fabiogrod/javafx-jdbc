@@ -33,4 +33,8 @@ public class SrvcDepartamento {
 			dao.atualiza(departamento);
 		}
 	}
+	
+	public void remover(Departamento departamento) {		
+		dao.deletaId(departamento.getId());		
+	}
 }

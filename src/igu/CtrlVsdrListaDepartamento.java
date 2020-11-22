@@ -3,9 +3,11 @@ package igu;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import aplicacao.Main;
+import bd.BDExcecaoIntegridade;
 import igu.monitores.MntrMudancaDados;
 import igu.util.Alertas;
 import igu.util.Utils;
@@ -19,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,7 +39,8 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 	@FXML private TableView<Departamento> tabelaDepartamento;
 	@FXML private TableColumn<Departamento, Integer> colunaIdDepartamento;
 	@FXML private TableColumn<Departamento, String> colunaNome;
-	@FXML private TableColumn<Departamento, Departamento> colunaEdicaoTabela;
+	@FXML private TableColumn<Departamento, Departamento> colunaEditar;
+	@FXML private TableColumn<Departamento, Departamento> colunaRemover;
 	
 	@FXML private Button btoNovo;
 	
@@ -66,10 +70,12 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 		tabelaDepartamento.prefHeightProperty().bind(palco.heightProperty());
 	}
 	
-	public void iniciaBotoesEdicao() {
+	public void iniciaBotoesEditar() {
 		
-		colunaEdicaoTabela.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue() ) );
-		colunaEdicaoTabela.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+		colunaEditar.setCellValueFactory(colunaEditar.getCellValueFactory());
+		
+		colunaEditar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue() ) );
+		colunaEditar.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
 			private final Button botaoEditar = new Button("Editar");
 			
 			@Override protected void updateItem(Departamento departamento, boolean vazio) {
@@ -84,12 +90,33 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 				botaoEditar.setOnAction(evento -> geraDialogoFormulario(departamento, "/igu/VsdrFormularioDepartamento.fxml", Utils.palcoAtual(evento) ) );
 			}			
 		});
-		colunaEdicaoTabela.setStyle("-fx-alignment: center");
+		colunaEditar.setStyle("-fx-alignment: center");
+	}
+	
+	public void iniciaBotoesRemover() {
+		
+		colunaRemover.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue() ) );
+		colunaRemover.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button botaoRemover = new Button("Remover");
+			
+			@Override protected void updateItem(Departamento departamento, boolean vazio) {
+				super.updateItem(departamento, vazio);
+				if (departamento == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(botaoRemover);
+				
+				botaoRemover.setOnAction(evento -> removerDepartamento(departamento) );
+			}				
+		});
+		colunaRemover.setStyle("-fx-alignment: center");
 	}
 	
 	public void atualizaVsdrTabela() {
 		if (srvcDepartamento == null) {
-			throw new IllegalStateException("Serviço nulo.");
+			throw new IllegalStateException("Serviço sem dados.");
 		}
 		
 		List<Departamento> lista = srvcDepartamento.pesquisar();
@@ -98,7 +125,9 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 		
 		tabelaDepartamento.setItems(listaObs);
 		
-		iniciaBotoesEdicao();		
+		iniciaBotoesEditar();
+		iniciaBotoesRemover();
+		
 	}
 	
 	private void geraDialogoFormulario(Departamento departamento,String nomeAbsoluto, Stage palcoPrincipal) {
@@ -128,4 +157,41 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 	@Override public void onDataChanged() {
 		atualizaVsdrTabela();		
 	}
+	
+	private void removerDepartamento(Departamento departamento) {
+		
+		Optional<ButtonType> confirma = Alertas.mostraConfirmacao("Confirmações", "Confirma exclusão");
+		if(confirma.get() == ButtonType.OK) {
+			
+			if(srvcDepartamento == null) {
+				throw new IllegalStateException("Serviço sem dados");
+			}
+			
+			try {
+				srvcDepartamento.remover(departamento);
+				atualizaVsdrTabela();
+			}
+			catch(BDExcecaoIntegridade e) {
+				Alertas.mostraAlertas("Erro ao remover objeto", null, e.getMessage(), AlertType.ERROR);
+			}
+		}
+	}		
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
