@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="340.0" prefWidth="419.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="igu.CtrlVsdrListaVendedor">
+<VBox prefHeight="340.0" prefWidth="554.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="igu.CtrlVsdrListaVendedor">
    <children>
       <Label text="Registro de Vendedor">
          <font>
@@ -25,8 +25,11 @@
         <columns>
           <TableColumn fx:id="colunaIdVendedor" prefWidth="75.0" text="Id" />
           <TableColumn fx:id="colunaNome" prefWidth="75.0" text="Nome" />
-            <TableColumn fx:id="colunaEditar" prefWidth="75.0" />
-            <TableColumn fx:id="colunaRemover" prefWidth="75.0" />
+            <TableColumn fx:id="colunaEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="colunaDataAniversario" prefWidth="133.0" text="Data de Aniversário" />
+            <TableColumn fx:id="colunaSalarioBase" minWidth="7.0" prefWidth="76.0" text="Salário Base" />
+            <TableColumn fx:id="colunaEditar" prefWidth="60.0" />
+            <TableColumn fx:id="colunaRemover" prefWidth="53.0" />
         </columns>
       </TableView>
    </children>

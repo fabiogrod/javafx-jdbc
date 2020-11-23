@@ -68,6 +68,16 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 		
 		Stage palco = (Stage)Main.getCenaPrincipal().getWindow();
 		tabelaDepartamento.prefHeightProperty().bind(palco.heightProperty());
+		
+		for(int i = 0; i < tabelaDepartamento.getColumns().size(); i++) {
+			
+			if (i == 1) {
+				tabelaDepartamento.getColumns().get(i).setStyle("-fx-alignment: center-left");
+			}
+			else {
+				tabelaDepartamento.getColumns().get(i).setStyle("-fx-alignment: center");
+			}
+		}
 	}
 	
 	public void iniciaBotoesEditar() {
