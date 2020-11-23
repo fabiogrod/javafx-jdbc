@@ -17,6 +17,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import modelo.servicos.SrvcDepartamento;
+import modelo.servicos.SrvcVendedor;
 
 public class CtrlVsdrMain implements Initializable {
 	
@@ -25,7 +26,10 @@ public class CtrlVsdrMain implements Initializable {
 	@FXML private MenuItem menuItemSobre;
 	
 	@FXML public void onMenuItemVendedorAcao() {
-		System.out.println("onMenuItemVendedorAcao");
+		carregarVisu("/igu/VsdrListaVendedor.fxml", (CtrlVsdrListaVendedor ctrlVsdrListaVend) -> {
+			ctrlVsdrListaVend.setSrvcVendedor(new SrvcVendedor());
+			ctrlVsdrListaVend.atualizaVsdrTabela();			
+		});
 	}
 	
 	@FXML public void onMenuItemDepartamentoAcao() {
