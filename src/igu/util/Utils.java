@@ -1,14 +1,18 @@
 package igu.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class Utils {
 
@@ -58,6 +62,33 @@ public class Utils {
 				}
 			};
 			return celula;
+		});
+	}
+
+	public static void formatoData(DatePicker dataPicker, String formato) {
+		dataPicker.setConverter(new StringConverter<LocalDate>() {
+			DateTimeFormatter formatoData = DateTimeFormatter.ofPattern(formato);
+			{
+				dataPicker.setPromptText(formato.toLowerCase());
+			}
+
+			@Override
+			public String toString(LocalDate data) {
+				if (data != null) {
+					return formatoData.format(data);
+				} else {
+					return "";
+				}
+			}
+
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.isEmpty()) {
+					return LocalDate.parse(string, formatoData);
+				} else {
+					return null;
+				}
+			}
 		});
 	}
 }
