@@ -1,5 +1,6 @@
 package igu;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,6 +27,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modelo.entidades.Vendedor;
 import modelo.servicos.SrvcVendedor;
@@ -147,27 +152,27 @@ public class CtrlVsdrListaVendedor implements Initializable, MntrMudancaDados {
 	}
 	
 	private void geraDialogoFormulario(Vendedor vendedor,String nomeAbsoluto, Stage palcoPrincipal) {
-//		try {
-//			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-//			Pane painel = carregador.load();
-//			
-//			CtrlFormularioVendedor ctrlVendedor = carregador.getController();
-//			ctrlVendedor.setVendedor(vendedor);
-//			ctrlVendedor.setSrvcVendedor(new SrvcVendedor());
-//			ctrlVendedor.inscricaoMntrMudancaDados(this);
-//			ctrlVendedor.atualizaFormulario();
-//			
-//			Stage palcoDialogo = new Stage();
-//			palcoDialogo.setTitle("Digite as informações do novo Vendedor: ");
-//			palcoDialogo.setScene(new Scene(painel));
-//			palcoDialogo.setResizable(false);
-//			palcoDialogo.initOwner(palcoPrincipal);
-//			palcoDialogo.initModality(Modality.WINDOW_MODAL);
-//			palcoDialogo.showAndWait();
-//		}
-//		catch (IOException e) {
-//			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane painel = carregador.load();
+			
+			CtrlFormularioVendedor ctrlVendedor = carregador.getController();
+			ctrlVendedor.setVendedor(vendedor);
+			ctrlVendedor.setSrvcVendedor(new SrvcVendedor());
+			ctrlVendedor.inscricaoMntrMudancaDados(this);
+			ctrlVendedor.atualizaFormulario();
+			
+			Stage palcoDialogo = new Stage();
+			palcoDialogo.setTitle("Digite as informações do novo Vendedor: ");
+			palcoDialogo.setScene(new Scene(painel));
+			palcoDialogo.setResizable(false);
+			palcoDialogo.initOwner(palcoPrincipal);
+			palcoDialogo.initModality(Modality.WINDOW_MODAL);
+			palcoDialogo.showAndWait();
+		}
+		catch (IOException e) {
+			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@Override public void onDataChanged() {
