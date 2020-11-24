@@ -27,6 +27,14 @@ public class Utils {
 			return null;
 		}
 	}
+	
+	public static Double ParseDouble(String str) {
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 
 	public static <T> void formataDataTabela(TableColumn<T, Date> colunaTabela, String formato) {
 		colunaTabela.setCellFactory(coluna -> {

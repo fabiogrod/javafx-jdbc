@@ -1,9 +1,11 @@
 package igu;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -124,16 +126,33 @@ public class CtrlFormularioVendedor implements Initializable {
 
 	private Vendedor getDadosFormulario() {
 		Vendedor vendedor = new Vendedor();
-
 		ExcecaoValidacao excecao = new ExcecaoValidacao("Erro de validacao");
-
 		vendedor.setId(Utils.ParseInt(txtId.getText()));
 
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
 			excecao.adicionarErro("nome", "Campo não pode ser vazio");
 		}
-
 		vendedor.setNome(txtNome.getText());
+		
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			excecao.adicionarErro("email", "Campo não pode ser vazio");
+		}
+		vendedor.setEmail(txtEmail.getText());
+		
+		if(dpDataAniversario.getValue() == null) {
+			excecao.adicionarErro("dataAniversario", "Campo não pode ser vazio");
+		}
+		else {
+			Instant instante = Instant.from(dpDataAniversario.getValue().atStartOfDay(ZoneId.systemDefault()));
+			vendedor.setDataAniversario(Date.from(instante));
+		}
+		
+		if (txtSalarioBase.getText() == null || txtSalarioBase.getText().trim().equals("")) {
+			excecao.adicionarErro("salarioBase", "Campo não pode ser vazio");
+		}
+		vendedor.setSalarioBase(Utils.ParseDouble(txtSalarioBase.getText()));
+		
+		vendedor.setDepartamento(cboxDepartamento.getValue());
 
 		if (excecao.getErros().size() > 0) {
 			throw excecao;
@@ -203,8 +222,34 @@ public class CtrlFormularioVendedor implements Initializable {
 	private void setMsgsErro(Map<String, String> erros) {
 		Set<String> campos = erros.keySet();
 
+		//lblErroNome.setText( campos.contains("nome") ? erros.get("nome") : "");
+		
 		if (campos.contains("nome")) {
 			lblErroNome.setText(erros.get("nome"));
+		}
+		else {
+			lblErroNome.setText("");
+		}
+		
+		if (campos.contains("email")) {
+			lblErroEmail.setText(erros.get("email"));
+		}
+		else {
+			lblErroEmail.setText("");
+		}
+		
+		if (campos.contains("dataAniversario")) {
+			lblErroDataAniversario.setText(erros.get("dataAniversario"));
+		}
+		else {
+			lblErroDataAniversario.setText("");
+		}
+		
+		if (campos.contains("salarioBase")) {
+			lblErroSalarioBase.setText(erros.get("salarioBase"));
+		}
+		else {
+			lblErroSalarioBase.setText("");
 		}
 	}
 

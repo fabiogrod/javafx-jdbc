@@ -30,25 +30,28 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Id" />
-            <Label text="Nome" GridPane.rowIndex="1" />
             <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
             <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="lblErroNome" prefHeight="17.0" prefWidth="179.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <padding>
-                  <Insets left="10.0" />
-               </padding></Label>
+            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dpDataAniversario" prefHeight="25.0" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtSalarioBase" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="cboxDepartamento" prefHeight="25.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <children>
                   <Button fx:id="btoSalvar" mnemonicParsing="false" onAction="#onBtoSalvarAcao" text="Salvar" />
                   <Button fx:id="btoCancelar" mnemonicParsing="false" onAction="#onBtoCancelarAcao" text="Cancelar" />
                </children>
             </HBox>
+            <Label text="Id" />
+            <Label text="Nome" GridPane.rowIndex="1" />
             <Label text="Email" GridPane.rowIndex="2" />
             <Label text="Data de Aniversário" GridPane.rowIndex="3" />
             <Label text="Salario Base" GridPane.rowIndex="4" />
-            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="txtSalarioBase" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Departamento" GridPane.rowIndex="5" />
+            <Label fx:id="lblErroNome" prefHeight="17.0" prefWidth="179.0" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
             <Label fx:id="lblErroEmail" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <padding>
                   <Insets left="10.0" />
@@ -64,9 +67,6 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Label text="Departamento" GridPane.rowIndex="5" />
-            <DatePicker fx:id="dpDataAniversario" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="cboxDepartamento" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </children>
