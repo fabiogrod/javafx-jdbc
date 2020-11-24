@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modelo.entidades.Vendedor;
+import modelo.servicos.SrvcDepartamento;
 import modelo.servicos.SrvcVendedor;
 
 public class CtrlVsdrListaVendedor implements Initializable, MntrMudancaDados {
@@ -158,7 +159,8 @@ public class CtrlVsdrListaVendedor implements Initializable, MntrMudancaDados {
 			
 			CtrlFormularioVendedor ctrlVendedor = carregador.getController();
 			ctrlVendedor.setVendedor(vendedor);
-			ctrlVendedor.setSrvcVendedor(new SrvcVendedor());
+			ctrlVendedor.setServicos(new SrvcVendedor(), new SrvcDepartamento());
+			ctrlVendedor.carregaObjetosAssociados();
 			ctrlVendedor.inscricaoMntrMudancaDados(this);
 			ctrlVendedor.atualizaFormulario();
 			
@@ -171,6 +173,7 @@ public class CtrlVsdrListaVendedor implements Initializable, MntrMudancaDados {
 			palcoDialogo.showAndWait();
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
 		}
 	}

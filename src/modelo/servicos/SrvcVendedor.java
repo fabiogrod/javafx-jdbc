@@ -25,16 +25,16 @@ public class SrvcVendedor {
 		return dao.pesquisar();
 	}
 	
-	public void salvarAtualizar(Vendedor Vendedor) {
-		if(Vendedor.getId() == null) {
-			dao.insere(Vendedor);
+	public void salvarAtualizar(Vendedor vendedor) {
+		if(vendedor.getId() == null) {
+			dao.insere(vendedor);
 		}
 		else {
-			dao.atualiza(Vendedor);
+			dao.atualiza(vendedor);
 		}
 	}
 	
-	public void remover(Vendedor Vendedor) {		
-		dao.deletaId(Vendedor.getId());		
+	public void remover(Vendedor vendedor) {		
+		dao.deletaId(vendedor.getId());		
 	}
 }

@@ -160,7 +160,8 @@ public class CtrlVsdrListaDepartamento implements Initializable, MntrMudancaDado
 			palcoDialogo.showAndWait();
 		}
 		catch (IOException e) {
-			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);
+			e.printStackTrace();
+			Alertas.mostraAlertas("IOException", "Erro ao carregar visualização", e.getMessage(), AlertType.ERROR);			
 		}
 	}
 
